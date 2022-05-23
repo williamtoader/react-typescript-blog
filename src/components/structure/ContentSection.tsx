@@ -53,18 +53,18 @@ class ContentSectionComponent extends Component<
 
     render() {
         let pageControls:React.ReactElement<any>;
-        if(this.props.userFilter === "") pageControls = (<React.Fragment>
-            <button onClick={()=>{this.setState({page: this.state.page + 1})}}>Next</button>
-            <button onClick={()=>{this.setState({page: this.state.page - 1})}}>Prev</button>
-        </React.Fragment>);
+        if(this.props.userFilter === "") pageControls = (<div className="w-full mt-4 mb-8 h-[50px]">
+            <button className="float-left text-2xl font-sans" onClick={()=>{this.setState({page: this.state.page - 1})}}>Prev</button>
+            <button className="float-right text-2xl font-sans" onClick={()=>{this.setState({page: this.state.page + 1})}}>Next</button>
+        </div>);
         else pageControls = <React.Fragment/>;
         return (
             <div>
-                {pageControls}
-
                 {this.state.articles.map(article => (
                     <ArticleMapper articleData={article}/>
                 ))}
+
+                {pageControls}
             </div>
         );
     }
@@ -104,7 +104,7 @@ class ContentSectionComponent extends Component<
                 articles => this.setState({articles})
             ).catch(
                 () => {
-                    this.setState({articles: []})
+                    this.setState({page: prevState.page})
                 }
             )
         }
@@ -114,7 +114,7 @@ class ContentSectionComponent extends Component<
                 articles => this.setState({articles})
             ).catch(
                 () => {
-                    this.setState({page: prevState.page});
+                    this.setState({articles: []});
                 }
             )
         }

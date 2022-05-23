@@ -24,7 +24,7 @@ class CustomSelect extends Component<{options: Array<{key: String, text: String}
   option(data) {
     return (
         <button
-            className="custom-select-option flex items-center h-8 px-3 text-sm bg-white hover:bg-gray-200 border-b border-black tracking-wide uppercase"
+            className="custom-select-option flex items-center h-auto py-2 px-3 text-sm bg-white hover:bg-gray-200 border-b border-black tracking-wide uppercase"
             onClick={() => {this.handleOption(data.key);}} key={data.key}
         >
           {data.text}
