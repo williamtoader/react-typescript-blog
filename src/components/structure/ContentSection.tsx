@@ -8,9 +8,11 @@ import {useDeps} from "../../service/DependencyInjector";
 import {UsersApiService} from "../../service/UsersApiService";
 import {CommentsApiService} from "../../service/CommentsApiService";
 import Comments from "./Comments";
+import {Subscription} from "rxjs";
 
 const ArticleMapper = props => {
     const articleData: IPost = props.articleData;
+
     return (
         <article>
             <ArticleHeading
@@ -48,7 +50,7 @@ class ContentSectionComponent extends Component<
         this.postsPromise = this.loadPosts();
         this.loadPosts = this.loadPosts.bind(this);
     }
-
+    private subscription: Subscription;
     private postsPromise;
 
     render() {
@@ -125,6 +127,17 @@ class ContentSectionComponent extends Component<
         this.postsPromise.then(
             articles => this.setState({articles})
         )
+        this.subscription = this.props.postsAPI.newPostsStream.subscribe(async (post: IPost) => {
+            post.user = await this.props.usersAPI.getById(post.userId);
+            post.comments = [];
+            this.setState({
+                articles: [post ,...this.state.articles]
+            })
+        })
+    }
+
+    componentWillUnmount() {
+        this.subscription.unsubscribe();
     }
 }
 

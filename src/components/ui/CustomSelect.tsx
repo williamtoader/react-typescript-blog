@@ -59,7 +59,7 @@ class CustomSelect extends Component<{options: Array<{key: String, text: String}
               />
             </svg>
           </button>
-          <div className={`absolute flex flex-col w-40 mt-1 shadow-lg ${this.state.hidden ? "hidden" : ""}`}>
+          <div className={`absolute flex z-50 flex-col w-40 mt-1 shadow-lg ${this.state.hidden ? "hidden" : ""}`}>
             {this.props.options.map(this.option)}
           </div>
         </div>

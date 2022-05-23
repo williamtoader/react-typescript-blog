@@ -3,8 +3,10 @@ import { useFormik } from 'formik';
 import CustomSelect from "./CustomSelect";
 import {Input} from "postcss";
 import {useDeps} from "../../service/DependencyInjector";
+import {IPost} from "../../types/IPost";
 export default function AddArticleForm(props) {
     const usersAPI = useDeps().usersAPI;
+    const postsAPI = useDeps().postsAPI;
     const [options, setOptions] = useState([{text: "Select user", key: ""}]);
     usersAPI.getAll().then(users => {
         let result = [ {text: "Select user", key: ""}, ...users.map(user => ({text: user.name, key: String(user.id)})) ];
@@ -17,7 +19,10 @@ export default function AddArticleForm(props) {
             postBody: ''
         },
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            const post: IPost = {
+                body: values.postBody, id: 666, title: values.title, userId: values.userId
+            }
+            postsAPI.newPostsStream.next(post);
         },
     });
     /*
@@ -26,7 +31,7 @@ export default function AddArticleForm(props) {
     User select
     Post body
     */
-    return (
+    if(props.visible === true) return (
         <div>
             <form onSubmit={(e)=>{e.preventDefault()}}>
                 <input
@@ -56,4 +61,5 @@ export default function AddArticleForm(props) {
             </form>
         </div>
     )
+    else return <React.Fragment/>
 }
